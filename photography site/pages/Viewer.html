@@ -2,38 +2,45 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <!-- 
+    Viewport settings for responsive design. 
+    Ensures proper scaling on all devices.
+  -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>Image Viewer — Cinematic Frames</title>
-  <!--
-    Link to your main style.css for overall site branding (colors, fonts).
-    This makes the viewer match the rest of your portfolio visually.
+  <!-- 
+    Import global styles 
+    (for site-wide fonts, colors, resets, etc.)
   -->
   <link rel="stylesheet" href="../style.css" />
 
   <style>
     /* 
-      ========== OVERALL PAGE LAYOUT ==========
-      The viewer aims to maximize image area and present a polished, distraction-free modal experience.
+      ========== BODY BASE ==========
+      Sets up a clean, seamless dark background 
+      with full viewport coverage, aligning content to the center.
     */
     body {
       background: #101013;
       color: #dedede;
       text-align: center;
-      margin: 0;
-      padding: 0;
-      min-height: 100vh; /* Ensures the background always goes full height */
+      margin: 0; padding: 0;
+      min-height: 100vh;
     }
-
     /* 
-      ========== HEADER/BAR AT THE TOP ==========
-      Shows Home (as a logo), "Go Back" button, and the image title centered. 
-      Fixed so it is always visible and does not scroll, with a semi-transparent dark background.
-      The height is kept minimal (~38px) to maximize space for the image.
+      ========== HEADER ==========
+      Fixed at the top, includes:
+      - Branding/home logo (left)
+      - "Go Back" navigation (left)
+      - Image title, centered above image (centered dynamically with JS)
+      Uses flex for left/right, and absolute for title.
+      Compact height for maximum image display.
     */
     .viewer-header {
       position: fixed;
       top: 0; left: 0; right: 0;
-      background: rgba(0,0,0,0.91);  /* Semi-transparent for style */
+      background: rgba(0,0,0,0.91);
       z-index: 2;
       display: flex;
       align-items: center;
@@ -41,20 +48,15 @@
       padding: 0 12px;
       box-sizing: border-box;
     }
-
-    /* 
-      Left section: Home logo + Go Back button.
-    */
     .viewer-header-left {
       display: flex;
       align-items: center;
       flex: 0 0 auto;
       min-width: 0;
     }
-
     /* 
-      Home logo: styled like the homepage, clickable, gold, but not a button.
-      (Why? Maintains branding consistency, is immediately recognizable, and follows your main nav style.)
+      Logo as clickable branded link (for home).
+      Not styled as a button: matches site branding.
     */
     .viewer-logo-link {
       font-family: 'Cormorant Garamond', serif;
@@ -71,15 +73,13 @@
       height: 38px;
       line-height: 38px;
     }
-    .viewer-logo-link:hover,
-    .viewer-logo-link:focus {
+    .viewer-logo-link:hover, .viewer-logo-link:focus {
       color: #ffe8b6;
       text-decoration: underline;
     }
-
     /* 
-      "Go Back" button: styled for clarity and UX.
-      (Why? Lets user return to previous gallery page; always visible and accessible on all screen sizes.)
+      "Go Back" navigation button: 
+      Always visible, styled for clarity, easy to hover/click.
     */
     .viewer-navbtn {
       color: #fff;
@@ -92,29 +92,22 @@
       margin-left: 0;
       transition: background 0.2s, color 0.2s;
       margin-right: 4px;
-      height: 30px;
-      line-height: 20px;
+      height: 30px; line-height: 20px;
       margin-top: 0; margin-bottom: 0;
       align-self: center;
       display: inline-block;
     }
     .viewer-navbtn:hover, .viewer-navbtn:focus {
-      background: #c7a46a;
-      color: #19191c;
+      background: #c7a46a; color: #19191c;
     }
 
-    /*
-      Center section: Title of the image.
-      Flexbox (.viewer-header-title-wrap) ensures it is horizontally centered regardless of side content.
-      (Why? Keeps focus on content; user always knows what image is being viewed.)
+    /* 
+      ========== TITLE/CAPTION ==========
+      The title is absolutely positioned! 
+      Dynamic JS ensures its center always matches the image's center, 
+      so it is visually always above the image even for portrait shots.
+      The fallback left:50%+transform just centers it in rare cases when JS hasn't run yet.
     */
-    .viewer-header-title-wrap {
-      flex: 1 1 0%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      pointer-events: none;
-    }
     .viewer-header-title {
       font-family: 'Inter', sans-serif;
       font-size: 1.08rem;
@@ -123,43 +116,43 @@
       letter-spacing: 1.02px;
       border-radius: 15px;
       padding: 3.5px 18px 3.5px 18px;
-      max-width: 65vw;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      pointer-events: auto;
       font-weight: 500;
       margin: 0;
+      position: absolute;
+      top: 0;
+      left: 50%; /* Default: centered if JS not run */
+      transform: translateX(-50%);
+      pointer-events: auto;
+      z-index: 5;
+      max-width: 65vw;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-
-    .viewer-header-right { 
-      flex: 0 0 auto; min-width: 0; 
-      /* 
-        Empty for symmetry; adjust here for additional header actions if desired.
-      */ 
-    }
-
-    /*
-      The main viewer area.
-      .viewer-img-wrap provides margin to offset the fixed header.
-      (Why? This ensures the image never sits under the header.)
+    .viewer-header-right { flex: 0 0 auto; min-width: 0; }
+    /* 
+      ========== MAIN IMAGE VIEWER AREA ==========
+      Adds margin so image is never under header (margin-top).
+      Uses flex for vertical centering.
     */
     .viewer-img-wrap {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
-      margin-top: 38px;  /* header height */
+      margin-top: 38px;
       min-height: 60vh;
       flex: 1;
     }
-    /*
-      Key image rule:
-      - Scales up to fill available width and height (never stretches).
-      - Always preserves aspect ratio.
-      - The crucial, dynamic part: max-width allows wide images to fill window; max-height allows portrait images to use the full height.
-      - width:auto and height:auto together let browser scale the image in the "most complete" way that doesn't overflow the box.
-      Why? This is the universal best practice for "object-fit: contain" gallery viewing.
+    /* 
+      MAIN: The image itself.
+      - max-width: fills the screen for landscape
+      - max-height: fills the available vertical area for portrait
+      - width: auto / height: auto allow browser to choose scaling that fits the box, never crops or stretches
     */
     .viewer-img {
       display: block;
@@ -168,37 +161,19 @@
       box-shadow: 0 8px 40px 0 #000a;
       background: #242428;
       max-width: 98vw;
-      max-height: calc(98vh - 44px); /* ~44px = header + gap */
+      max-height: calc(98vh - 44px); /* header + small gap */
       width: auto;
       height: auto;
-      transition: max-width 0.3s, max-height 0.3s;
     }
-    /*
-      Responsive tweaks for mobile: 
-      shrink header height and image scaling for usability on smaller screens
+    /* 
+      Responsive/mobile tweaks: 
+      Reduces header/image size on narrow screens.
     */
     @media (max-width: 700px) {
-      .viewer-header {
-        height: 32px;
-        padding: 0 2vw;
-      }
-      .viewer-logo-link {
-        font-size: 1rem;
-        padding: 0 6px 0 0;
-        line-height: 32px;
-        height: 32px;
-      }
-      .viewer-navbtn {
-        font-size: 0.95rem;
-        padding: 2.5px 8px;
-        height: 25px;
-        line-height: 18px;
-      }
-      .viewer-header-title {
-        font-size: 0.95rem;
-        padding: 1.5px 8vw 1.5px 8vw;
-        max-width: 70vw;
-      }
+      .viewer-header { height: 32px; padding: 0 2vw; }
+      .viewer-logo-link { font-size: 1rem; padding: 0 6px 0 0; line-height: 32px; height: 32px; }
+      .viewer-navbtn { font-size: 0.95rem; padding: 2.5px 8px; height: 25px; line-height: 18px; }
+      .viewer-header-title { font-size: 0.95rem; padding: 1.5px 8vw; max-width: 70vw; height: 32px;}
       .viewer-img-wrap { margin-top: 32px; }
       .viewer-img { max-height: 49vh; }
     }
@@ -206,54 +181,93 @@
 </head>
 <body>
   <!-- 
-    HEADER NAVIGATION:
-    - Home (logo) brings user back to gallery main page (index.html)
-    - Go Back uses browser history to return to previous gallery or grid
-    - Centered title of the image for clear context
+    HEADER NAVIGATION & TITLE/CAPTION
+    - Logo ("Cinematic Frames") is a home link
+    - "Go Back" lets user return to gallery/grid
+    - Title always *aligned above the image*, no matter aspect ratio or browser width
   -->
-  <div class="viewer-header">
+  <div class="viewer-header" id="viewer-header">
     <div class="viewer-header-left">
       <a href="../index.html" class="viewer-logo-link">Cinematic Frames</a>
       <a href="javascript:history.back()" class="viewer-navbtn">Go Back</a>
     </div>
-    <div class="viewer-header-title-wrap">
-      <span class="viewer-header-title" id="viewer-caption"></span>
-    </div>
+    <!-- Centered title, dynamically positioned above image center -->
+    <span class="viewer-header-title" id="viewer-caption"></span>
     <div class="viewer-header-right"></div>
   </div>
   <div class="viewer-img-wrap">
     <!-- 
-      IMAGE:
-      - src and alt are JS-assigned with query params (for simple URL-passing from your gallery)
-      - No classes are toggled; universal scaling works for any photo orientation.
+      Loads image and alt from URL params via JS.
+      The layout and aspect ratio is managed by CSS.
     -->
     <img class="viewer-img" id="viewer-img" src="" alt="">
   </div>
   <script>
     /*
       JS LOGIC:
-      - Reads the current image src and title from the query string (?src=...&title=...)
-      - Applies them to the image (src/alt) and title (span)
-      - Sets document.title for good UX and browser history labeling.
-      - Why? This lets your gallery "launch" images into the viewer with full context, using only URL parameters.
+      1. Reads image source and title from query string (?src=...&title=...)
+      2. Sets image and title, updates page <title> for UX.
+      3. On image load and on window resize, calculates horizontal center of image relative to header,
+         and moves the title span directly above the image.
+      This makes the UI look professional for portrait and landscape—title always "tracks" the photo.
     */
+
+    // Simple helper for grabbing a query string value
     function getParam(name) {
       const url = new URL(window.location.href);
       return url.searchParams.get(name);
     }
+    // Get keys from URL
     const imgSrc = getParam("src");
     const imgTitle = getParam("title");
     const img = document.getElementById("viewer-img");
     const caption = document.getElementById("viewer-caption");
 
+    // Set the caption and page title for tab/history context
     if (imgTitle) {
       caption.textContent = decodeURIComponent(imgTitle);
       document.title = decodeURIComponent(imgTitle) + " — Cinematic Frames";
     }
+    // Set the image src and its alt text (for accessibility/UX)
     if (imgSrc) {
       img.src = imgSrc;
       img.alt = imgTitle ? decodeURIComponent(imgTitle) : "";
     }
+
+    /*
+      ---- DYNAMIC CAPTION-TO-IMAGE ALIGNMENT ----
+      Calculates the center of the photo (no matter aspect ratio or scale)
+      and moves the caption so it's always centered above the image.
+      - Runs on image load, window resize (including zoom).
+      - Robust for grid/portrait/landscape, resizes, and cached images!
+    */
+    function alignTitleToImage() {
+      var header = document.getElementById('viewer-header');
+      var title = document.getElementById('viewer-caption');
+      var image = document.getElementById('viewer-img');
+      if (!header || !title || !image || !image.complete) return;
+
+      // Get the bounding box of both header and image on-screen
+      var rect = image.getBoundingClientRect();
+      var headerRect = header.getBoundingClientRect();
+
+      // Locate image's horizontal center (relative to the header's left)
+      var imgCenter = rect.left + (rect.width / 2) - headerRect.left;
+
+      // Place title so its horizontal center matches that pixel coordinate
+      title.style.left = imgCenter + 'px';
+      title.style.transform = 'translateX(-50%)';
+    }
+
+    // Run alignment after image loads, and whenever window resizes
+    function updateAlignment() {
+      setTimeout(alignTitleToImage, 0);
+    }
+    img.onload = updateAlignment;
+    window.addEventListener('resize', updateAlignment);
+    // If image is cached (already loaded)
+    if (img.complete && img.naturalWidth > 0) updateAlignment();
+
   </script>
 </body>
 </html>
