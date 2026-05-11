@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Image Viewer — Cinematic Frames</title>
+  <!--
+    Link to your main style.css for overall site branding (colors, fonts).
+    This makes the viewer match the rest of your portfolio visually.
+  -->
+  <link rel="stylesheet" href="../style.css" />
+
+  <style>
+    /* 
+      ========== OVERALL PAGE LAYOUT ==========
+      The viewer aims to maximize image area and present a polished, distraction-free modal experience.
+    */
+    body {
+      background: #101013;
+      color: #dedede;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh; /* Ensures the background always goes full height */
+    }
+
+    /* 
+      ========== HEADER/BAR AT THE TOP ==========
+      Shows Home (as a logo), "Go Back" button, and the image title centered. 
+      Fixed so it is always visible and does not scroll, with a semi-transparent dark background.
+      The height is kept minimal (~38px) to maximize space for the image.
+    */
+    .viewer-header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      background: rgba(0,0,0,0.91);  /* Semi-transparent for style */
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      height: 38px;
+      padding: 0 12px;
+      box-sizing: border-box;
+    }
+
+    /* 
+      Left section: Home logo + Go Back button.
+    */
+    .viewer-header-left {
+      display: flex;
+      align-items: center;
+      flex: 0 0 auto;
+      min-width: 0;
+    }
+
+    /* 
+      Home logo: styled like the homepage, clickable, gold, but not a button.
+      (Why? Maintains branding consistency, is immediately recognizable, and follows your main nav style.)
+    */
+    .viewer-logo-link {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.16rem;
+      color: #c7a46a;
+      text-decoration: none;
+      padding: 0 16px 0 4px;
+      background: none;
+      border: none;
+      margin-right: 2px;
+      transition: color 0.2s;
+      white-space: nowrap;
+      display: inline-block;
+      height: 38px;
+      line-height: 38px;
+    }
+    .viewer-logo-link:hover,
+    .viewer-logo-link:focus {
+      color: #ffe8b6;
+      text-decoration: underline;
+    }
+
+    /* 
+      "Go Back" button: styled for clarity and UX.
+      (Why? Lets user return to previous gallery page; always visible and accessible on all screen sizes.)
+    */
+    .viewer-navbtn {
+      color: #fff;
+      background: #19191c;
+      border: 1px solid #c7a46a;
+      border-radius: 999px;
+      padding: 4px 16px;
+      font-size: 0.99rem;
+      text-decoration: none;
+      margin-left: 0;
+      transition: background 0.2s, color 0.2s;
+      margin-right: 4px;
+      height: 30px;
+      line-height: 20px;
+      margin-top: 0; margin-bottom: 0;
+      align-self: center;
+      display: inline-block;
+    }
+    .viewer-navbtn:hover, .viewer-navbtn:focus {
+      background: #c7a46a;
+      color: #19191c;
+    }
+
+    /*
+      Center section: Title of the image.
+      Flexbox (.viewer-header-title-wrap) ensures it is horizontally centered regardless of side content.
+      (Why? Keeps focus on content; user always knows what image is being viewed.)
+    */
+    .viewer-header-title-wrap {
+      flex: 1 1 0%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      pointer-events: none;
+    }
+    .viewer-header-title {
+      font-family: 'Inter', sans-serif;
+      font-size: 1.08rem;
+      background: transparent;
+      color: #c7a46a;
+      letter-spacing: 1.02px;
+      border-radius: 15px;
+      padding: 3.5px 18px 3.5px 18px;
+      max-width: 65vw;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      pointer-events: auto;
+      font-weight: 500;
+      margin: 0;
+    }
+
+    .viewer-header-right { 
+      flex: 0 0 auto; min-width: 0; 
+      /* 
+        Empty for symmetry; adjust here for additional header actions if desired.
+      */ 
+    }
+
+    /*
+      The main viewer area.
+      .viewer-img-wrap provides margin to offset the fixed header.
+      (Why? This ensures the image never sits under the header.)
+    */
+    .viewer-img-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      margin-top: 38px;  /* header height */
+      min-height: 60vh;
+      flex: 1;
+    }
+    /*
+      Key image rule:
+      - Scales up to fill available width and height (never stretches).
+      - Always preserves aspect ratio.
+      - The crucial, dynamic part: max-width allows wide images to fill window; max-height allows portrait images to use the full height.
+      - width:auto and height:auto together let browser scale the image in the "most complete" way that doesn't overflow the box.
+      Why? This is the universal best practice for "object-fit: contain" gallery viewing.
+    */
+    .viewer-img {
+      display: block;
+      margin: 0 auto 15px auto;
+      border-radius: 14px;
+      box-shadow: 0 8px 40px 0 #000a;
+      background: #242428;
+      max-width: 98vw;
+      max-height: calc(98vh - 44px); /* ~44px = header + gap */
+      width: auto;
+      height: auto;
+      transition: max-width 0.3s, max-height 0.3s;
+    }
+    /*
+      Responsive tweaks for mobile: 
+      shrink header height and image scaling for usability on smaller screens
+    */
+    @media (max-width: 700px) {
+      .viewer-header {
+        height: 32px;
+        padding: 0 2vw;
+      }
+      .viewer-logo-link {
+        font-size: 1rem;
+        padding: 0 6px 0 0;
+        line-height: 32px;
+        height: 32px;
+      }
+      .viewer-navbtn {
+        font-size: 0.95rem;
+        padding: 2.5px 8px;
+        height: 25px;
+        line-height: 18px;
+      }
+      .viewer-header-title {
+        font-size: 0.95rem;
+        padding: 1.5px 8vw 1.5px 8vw;
+        max-width: 70vw;
+      }
+      .viewer-img-wrap { margin-top: 32px; }
+      .viewer-img { max-height: 49vh; }
+    }
+  </style>
+</head>
+<body>
+  <!-- 
+    HEADER NAVIGATION:
+    - Home (logo) brings user back to gallery main page (index.html)
+    - Go Back uses browser history to return to previous gallery or grid
+    - Centered title of the image for clear context
+  -->
+  <div class="viewer-header">
+    <div class="viewer-header-left">
+      <a href="../index.html" class="viewer-logo-link">Cinematic Frames</a>
+      <a href="javascript:history.back()" class="viewer-navbtn">Go Back</a>
+    </div>
+    <div class="viewer-header-title-wrap">
+      <span class="viewer-header-title" id="viewer-caption"></span>
+    </div>
+    <div class="viewer-header-right"></div>
+  </div>
+  <div class="viewer-img-wrap">
+    <!-- 
+      IMAGE:
+      - src and alt are JS-assigned with query params (for simple URL-passing from your gallery)
+      - No classes are toggled; universal scaling works for any photo orientation.
+    -->
+    <img class="viewer-img" id="viewer-img" src="" alt="">
+  </div>
+  <script>
+    /*
+      JS LOGIC:
+      - Reads the current image src and title from the query string (?src=...&title=...)
+      - Applies them to the image (src/alt) and title (span)
+      - Sets document.title for good UX and browser history labeling.
+      - Why? This lets your gallery "launch" images into the viewer with full context, using only URL parameters.
+    */
+    function getParam(name) {
+      const url = new URL(window.location.href);
+      return url.searchParams.get(name);
+    }
+    const imgSrc = getParam("src");
+    const imgTitle = getParam("title");
+    const img = document.getElementById("viewer-img");
+    const caption = document.getElementById("viewer-caption");
+
+    if (imgTitle) {
+      caption.textContent = decodeURIComponent(imgTitle);
+      document.title = decodeURIComponent(imgTitle) + " — Cinematic Frames";
+    }
+    if (imgSrc) {
+      img.src = imgSrc;
+      img.alt = imgTitle ? decodeURIComponent(imgTitle) : "";
+    }
+  </script>
+</body>
+</html>

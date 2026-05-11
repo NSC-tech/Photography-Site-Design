@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>City Gallery — Cinematic Frames</title>
+  <link rel="stylesheet" href="../style.css" />
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="../index.html" class="logo">Cinematic Frames</a>
+      <div class="nav-links">
+        <a href="../index.html#portfolio">Portfolio</a>
+        <a href="../index.html#about">About</a>
+        <a href="../index.html#contact">Contact</a>
+      </div>
+    </nav>
+  </header>
+  <section>
+    <div class="section-title">
+      <h2>City</h2>
+      <p>Explore cityscapes and architectural photography.</p>
+    </div>
+    <div class="gallery gallery-lightbox">
+      <div class="gallery-item" data-title="City Clock Tower">
+        <img src="../Images/bell-tower.JPG" alt="City Clock Tower">
+        <div class="photo-title">City Clock Tower</div>
+      </div>
+      <div class="gallery-item" data-title="Urban Symphony">
+        <img src="../Images/city1.jpg" alt="Urban Symphony">
+        <div class="photo-title">Urban Symphony</div>
+      </div>
+      <div class="gallery-item" data-title="Night on the Streets">
+        <img src="../Images/city2.jpg" alt="Night on the Streets">
+        <div class="photo-title">Night on the Streets</div>
+      </div>
+      <!-- Add more images here the same way -->
+    </div>
+    <a class="btn" id="back-btn" href="../index.html#portfolio" style="margin-top:40px;display:inline-block;">Back to Featured Work</a>
+  </section>
+
+  <div id="lightbox-modal">
+    <span class="close-lightbox">&times;</span>
+    <a href="#" id="open-original-btn" title="Open original in new tab" target="_blank" rel="noopener noreferrer">
+    <span style="font-size: 2.1rem; color: #fff; vertical-align: middle;">&#128065;</span>
+  </a>
+  <img id="lightbox-img" src="" alt="Expanded photo">
+  <div id="lightbox-caption"></div>
+</div>
+
+  <script src="../script.js"></script>
+</body>
+</html> 

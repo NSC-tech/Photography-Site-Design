@@ -30,13 +30,13 @@ header {
   top: 0;
   background: rgba(0,0,0,0.7);
   backdrop-filter: blur(10px);
+  z-index: 2;
 }
 
 nav {
   width: 90%;
   margin: auto;
   padding: 20px 0;
-
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -46,6 +46,11 @@ nav {
   font-family: 'Cormorant Garamond', serif;
   font-size: 2rem;
   color: var(--accent);
+  text-decoration: none;
+  transition: color 0.25s;
+}
+.logo:hover {
+  color: #fff2c8;
 }
 
 .nav-links {
@@ -65,19 +70,15 @@ nav {
 .hero {
   height: 98vh;
   width: 100%;
-
   background:
     linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)),
-    url('images/tree-lined-road.jpg');
-
+    url('Images/tree-lined-road.JPG');
   background-size: cover;
   background-position: center;
   border-bottom: 1px solid rgba(255,255,255,0.08);
-
   display: flex;
   justify-content: center;
   align-items: center;
-
   text-align: center;
   padding: 20px;
 }
@@ -85,7 +86,6 @@ nav {
 .hero-content h1 {
   font-size: 5rem;
   margin-bottom: 20px;
-
   font-family: 'Cormorant Garamond', serif;
 }
 
@@ -96,16 +96,11 @@ nav {
 
 .btn {
   display: inline-block;
-
   padding: 14px 28px;
-
   border: 1px solid var(--accent);
-
   border-radius: 999px;
-
   color: var(--accent);
   text-decoration: none;
-
   transition: 0.3s;
 }
 
@@ -130,35 +125,178 @@ section {
 
 .gallery {
   display: grid;
-
-  grid-template-columns:
-    repeat(auto-fit, minmax(300px, 1fr));
-
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 20px;
 }
 
 .gallery-item {
-  overflow: hidden;
+  position: relative;
   border-radius: 20px;
+  overflow: hidden;
+  transition: box-shadow 0.3s;
+  background: var(--surface);
+  text-decoration: none;
 }
 
 .gallery-item img {
   height: 400px;
-  transition: 0.5s;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 20px;
+  transition: transform 0.5s;
 }
 
 .gallery-item:hover img {
   transform: scale(1.05);
 }
 
-.about-box {
-  background: var(--surface);
-
-  padding: 40px;
-
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.4s ease;
   border-radius: 20px;
 }
 
+.gallery-item:hover .overlay {
+  opacity: 1;
+}
+
+.overlay-text {
+  color: #fff;
+  font-size: 1.5rem;
+  letter-spacing: 2px;
+  opacity: 0;
+  transform: translateY(15px);
+  transition: all 0.4s ease;
+}
+
+.gallery-item:hover .overlay-text {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* GALLERY LIGHTBOX additions */
+.gallery-lightbox .gallery-item {
+  cursor: pointer;
+  position: relative;
+}
+.photo-title {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,.7);
+  color: var(--accent);
+  opacity: 0;
+  text-align: center;
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+  padding: 12px 0 10px 0;
+  border-radius: 0 0 20px 20px;
+  transition: opacity 0.25s;
+  pointer-events: none;
+}
+.gallery-lightbox .gallery-item:hover .photo-title {
+  opacity: 1;
+}
+
+#lightbox-modal {
+  display: none;
+  position: fixed;
+  z-index: 20;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(10,10,12,.96);
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  transition: opacity 0.2s;
+}
+
+#lightbox-modal.active {
+  display: flex;
+  animation: fadeIn 0.3s;
+}
+
+#lightbox-img {
+  border-radius: 18px;
+  box-shadow: 0 6px 60px -12px rgba(0,0,0,0.7);
+  display: block;
+  margin: 0 auto;
+}
+
+#lightbox-modal.portrait #lightbox-img {
+  max-width: 55vw;
+  max-height: 92vh;
+}
+#lightbox-modal.landscape #lightbox-img {
+  max-width: 98vw;
+  max-height: 95vh;
+}
+
+#lightbox-caption {
+  margin-top: 12px;
+  margin-bottom: 16px;
+  color: var(--accent);
+  font-size: 1.45rem;
+  text-align: center;
+  letter-spacing: 1.2px;
+}
+
+.close-lightbox {
+  position: absolute;
+  top: 36px;
+  right: 56px;
+  color: #fff;
+  font-size: 2.8rem;
+  font-weight: 300;
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.25s;
+  z-index: 30;
+}
+.close-lightbox:hover {
+  color: var(--accent);
+}
+#open-original-btn {
+  position: absolute;
+  top: 36px;
+  right: 95px; /* space it to the left of close button */
+  color: #fff;
+  background: none;
+  border: none;
+  font-size: 2.1rem;
+  z-index: 31;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.25s;
+  padding: 0 6px;
+}
+#open-original-btn:hover {
+  color: var(--accent);
+}
+
+/* Hide everything but the modal when open */
+body.lightbox-open > *:not(#lightbox-modal) {
+  filter: blur(8px) brightness(0.5);
+  pointer-events: none;
+  user-select: none;
+}
+body.lightbox-open {
+  overflow: hidden;
+}
+
+/* About box, Tabs, Tab Images */
+.about-box {
+  background: var(--surface);
+  padding: 40px;
+  border-radius: 20px;
+}
 .about-box p {
   margin-top: 20px;
   color: var(--muted);
@@ -168,70 +306,6 @@ section {
   text-align: center;
 }
 
-
-/* floating buttons for featured work */
-
-/* Container positioning */
-.gallery-item {
-  position: relative;
-  overflow: hidden;
-}
-
-/* Image */
-.gallery-item img {
-  width: 100%;
-  height: 400px;
-  object-fit: cover;
-  transition: transform 0.5s ease;
-}
-
-/* Zoom effect on hover */
-.gallery-item:hover img {
-  transform: scale(1.05);
-}
-
-/* Overlay (hidden by default) */
-.overlay {
-  position: absolute;
-  inset: 0;
-
-  background: rgba(0, 0, 0, 0.55);
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  opacity: 0;
-  transition: opacity 0.4s ease;
-}
-
-/* Show overlay on hover */
-.gallery-item:hover .overlay {
-  opacity: 1;
-}
-
-/* Text animation */
-.overlay-text {
-  color: #fff;
-  font-size: 1.5rem;
-  letter-spacing: 2px;
-
-  transform: translateY(15px);
-  opacity: 0;
-
-  transition: all 0.4s ease;
-}
-
-/* Text floats up on hover */
-.gallery-item:hover .overlay-text {
-  transform: translateY(0);
-  opacity: 1;
-}
-
-
-
-/* Start about me section. *\
-
 /* Tabs row */
 .tabs {
   display: flex;
@@ -239,8 +313,6 @@ section {
   justify-content: center;
   margin-bottom: 30px;
 }
-
-/* Tab buttons */
 .tab {
   background: transparent;
   border: 1px solid rgba(255,255,255,0.2);
@@ -249,38 +321,75 @@ section {
   cursor: pointer;
   transition: 0.3s;
 }
-
 .tab:hover {
   color: white;
   border-color: #c7a46a;
 }
-
 .tab.active {
   color: #c7a46a;
   border-color: #c7a46a;
 }
-
-/* Panels */
 .tab-panel {
   display: none;
   text-align: center;
 }
-
 .tab-panel.active {
   display: block;
 }
-
-/* Images inside tabs */
 .tab-images {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 15px;
   margin-top: 20px;
 }
-
 .tab-images img {
   width: 100%;
   height: 300px;
   object-fit: cover;
   border-radius: 12px;
+}
+/* Viewer.html quick override for minimal style when used in /pages/ */
+.viewer-header {
+  position: fixed;
+  left: 0; right: 0; top: 0;
+  background: rgba(0,0,0,0.83);
+  z-index: 2;
+  text-align: left;
+  padding: 18px 34px 14px 34px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem;
+  color: #c7a46a;
+}
+.viewer-img-wrap {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  margin-top: 70px; margin-bottom: 24px; min-height: 40vh; flex: 1;
+}
+.viewer-img {
+  max-width: 98vw; max-height: 92vh;
+  border-radius: 14px;
+  box-shadow: 0 8px 40px 0 #000a;
+  background: #242428;
+}
+.viewer-caption {
+  margin-top: 20px;
+  color: #c7a46a;
+  font-size: 1.3rem;
+  letter-spacing: 1.2px;
+  text-align: center;
+}
+.viewer-back {
+  color: #fff;
+  background: #19191c;
+  border: 1px solid #c7a46a;
+  border-radius: 999px;
+  padding: 11px 32px;
+  font-size: 1rem;
+  text-decoration: none;
+  margin-bottom: 48px;
+  transition: 0.2s;
+  display: inline-block;
+}
+.viewer-back:hover {
+  background: #c7a46a;
+  color: #101013;
 }

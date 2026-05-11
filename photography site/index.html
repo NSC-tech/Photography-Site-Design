@@ -3,26 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
   <title>Cinematic Frames</title>
-
-
-  <!-- CSS FILE -->
   <link rel="stylesheet" href="style.css" />
-
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Cormorant+Garamond:wght@500;600&display=swap" rel="stylesheet">
 </head>
-
 <body>
-
   <header>
     <nav>
-      <div class="logo">Cinematic Frames</div>
-
+      <a href="index.html" class="logo">Cinematic Frames</a>
       <div class="nav-links">
         <a href="#portfolio">Portfolio</a>
         <a href="#about">About</a>
@@ -34,136 +22,91 @@
   <section class="hero">
     <div class="hero-content">
       <h1>Nature. City Life. Human Stories.</h1>
-
       <p>
         Dark cinematic photography inspired by atmosphere,
         emotion, and storytelling.
       </p>
-
       <a href="#portfolio" class="btn">View Portfolio</a>
     </div>
   </section>
 
   <section id="portfolio">
-
     <div class="section-title">
       <h2>Featured Work</h2>
     </div>
-
     <div class="gallery">
-
-      
-      <div class="gallery-item">
-
-          <img src="images/bell-tower.JPG" alt="Bell Tower">
-          
-          <div class="overlay">
-          <div class="overlay-text">
-            City
-          </div>
-        </div>
-
-      </div>
-
-
-      <div class="gallery-item">
-        <img src="images/flowerbed.JPG" alt="flowerbed">
-          
-          <div class="overlay">
-          <div class="overlay-text">
-            Nature  
-          </div>
-        </div>
-      </div>
-
-      <div class="gallery-item">
-        <img src="images/biker.JPG" alt="biker">
-
-          <div class="overlay">
-          <div class="overlay-text">
-            People  
-          </div>
-        </div>
-      </div>
-      
+      <a class="gallery-item" href="pages/City.html">
+        <img src="Images/bell-tower.JPG" alt="Bell Tower">
+        <div class="overlay"><div class="overlay-text">City</div></div>
+      </a>
+      <a class="gallery-item" href="pages/Nature.html">
+        <img src="Images/flowerbed.JPG" alt="Flowerbed">
+        <div class="overlay"><div class="overlay-text">Nature</div></div>
+      </a>
+      <a class="gallery-item" href="pages/People.html">
+        <img src="Images/biker.JPG" alt="Biker">
+        <div class="overlay"><div class="overlay-text">People</div></div>
+      </a>
     </div>
-
   </section>
 
   <section id="about">
-
-  <div class="tabs">
-
-    <button class="tab active" onclick="showTab('about')">
-      About Me
-    </button>
-
-    <button class="tab" onclick="showTab('work')">
-      Workshoots
-    </button>
-
-    <button class="tab" onclick="showTab('gear')">
-      Gear
-    </button>
-
-  </div>
-
-  <div class="tab-content">
-
-    <div id="about" class="tab-panel active">
-      <h2>About Me</h2>
-      <p>
-        I focus on cinematic photography capturing nature, city life,
-        and human emotion through light and composition.
-      </p>
-
-      <div class="tab-images">
-        <img src="images/aboutme/me.JPG">
-        <img src="images/city1.jpg">
-      </div>
+    <div class="tabs">
+      <button class="tab active" onclick="showTab('about', event)">
+        About Me
+      </button>
+      <button class="tab" onclick="showTab('work', event)">
+        Workshoots
+      </button>
+      <button class="tab" onclick="showTab('gear', event)">
+        Gear
+      </button>
     </div>
-
-    <div id="work" class="tab-panel">
-      <h2>Workshoots</h2>
-      <p>
-        A collection of past shoots including urban streets,
-        moody portraits, and natural landscapes.
-      </p>
-
-      <div class="tab-images">
-        <img src="images/work1.jpg">
-        <img src="images/work2.jpg">
+    <div class="tab-content">
+      <div id="about" class="tab-panel active">
+        <h2>About Me</h2>
+        <p>
+          I focus on cinematic photography capturing nature, city life,
+          and human emotion through light and composition.
+        </p>
+        <div class="tab-images">
+          <img src="Images/aboutme/me.JPG">
+          <img src="Images/city1.jpg">
+        </div>
       </div>
-    </div>
-
-    <!--<div id="gear" class="tab-panel">
-      <h2>Gear</h2>
-      <p>
-        Cameras, lenses and tools used to create cinematic visuals.
-      </p>
-
-      <div class="tab-images">
-        <img src="images/camera1.jpg">
-        <img src="images/lens1.jpg">
+      <div id="work" class="tab-panel">
+        <h2>Workshoots</h2>
+        <p>
+          A collection of past shoots including urban streets,
+          moody portraits, and natural landscapes.
+        </p>
+        <div class="tab-images">
+          <img src="Images/work1.jpg">
+          <img src="Images/work2.jpg">
+        </div>
       </div>
+      <!--
+      <div id="gear" class="tab-panel">
+        <h2>Gear</h2>
+        <p>
+          Cameras, lenses and tools used to create cinematic visuals.
+        </p>
+        <div class="tab-images">
+          <img src="Images/camera1.jpg">
+          <img src="Images/lens1.jpg">
+        </div>
+      </div>
+      -->
     </div>
-    --->
-  </div>
-
-</section>
+  </section>
 
   <section id="contact">
-
     <h2>Contact</h2>
-
     <a href="mailto:your@email.com" class="btn">
       Contact Me
     </a>
-
   </section>
 
-  <!-- JS FILE -->
   <script src="script.js"></script>
-
 </body>
 </html>

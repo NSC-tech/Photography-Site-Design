@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nature Gallery — Cinematic Frames</title>
+  <link rel="stylesheet" href="../style.css" />
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="../index.html" class="logo">Cinematic Frames</a>
+      <div class="nav-links">
+        <a href="../index.html#portfolio">Portfolio</a>
+        <a href="../index.html#about">About</a>
+        <a href="../index.html#contact">Contact</a>
+      </div>
+    </nav>
+  </header>
+  <section>
+    <div class="section-title">
+      <h2>Nature</h2>
+      <p>Enjoy nature, landscape, and flora.</p>
+    </div>
+    <div class="gallery gallery-lightbox">
+      <div class="gallery-item" data-title="Meadow in Spring">
+        <img src="../Images/nature1.jpg" alt="Nature 1">
+        <div class="photo-title">Meadow in Spring</div>
+      </div>
+      <div class="gallery-item" data-title="Wild Dandelions">
+        <img src="../Images/flowerbed.JPG" alt="flowerbed">
+        <div class="photo-title">Wild Dandelions</div>
+      </div>
+      <!-- Add more images here the same way -->
+    </div>
+    <a class="btn" id="back-btn" href="../index.html#portfolio" style="margin-top:40px;display:inline-block;">Back to Featured Work</a>
+  </section>
+
+  <div id="lightbox-modal">
+  <span class="close-lightbox">&times;</span>
+  <a href="#" id="open-original-btn" title="Open original in new tab" target="_blank" rel="noopener noreferrer">
+    <span style="font-size: 2.1rem; color: #fff; vertical-align: middle;">&#128065;</span>
+  </a>
+  <img id="lightbox-img" src="" alt="Expanded photo">
+  <div id="lightbox-caption"></div>
+</div>
+
+  <script src="../script.js"></script>
+</body>
+</html>
